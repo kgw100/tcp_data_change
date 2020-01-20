@@ -16,7 +16,6 @@ int main(int argc, const char* argv[])
      int fd;
      int rv;
      char buf[4096] __attribute__ ((aligned));
-//     u_char * buf;
      fr_str = argv[1];
      to_str = argv[2];
 

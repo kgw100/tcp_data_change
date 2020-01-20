@@ -9,7 +9,8 @@ public:
     uint32_t daddr;
     uint32_t ports;
 
-    Tuple_key() {}
+    Tuple_key() {
+    }
     Tuple_key(uint32_t cp_saddr, uint32_t cp_daddr, uint16_t cp_sport, uint16_t cp_dport) : saddr(cp_saddr), daddr(cp_daddr)
     {
         ports = cp_sport;
