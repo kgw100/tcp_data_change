@@ -36,7 +36,6 @@ public:
         }
     }
 
-
     void print_Tuple_key(void)
     {
         printf("%s\t",inet_ntoa(*reinterpret_cast<struct in_addr*>(&saddr)));

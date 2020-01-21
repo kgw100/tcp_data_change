@@ -19,13 +19,14 @@
 #include <cstring>
 #include <netinet/ip.h>
 #include <netinet/tcp.h>
+#include <tuple>
 
 
 using namespace std;
 
 using tuple_key = tuple<uint32_t,uint32_t,uint16_t,uint16_t>;
 
-struct tuple_hash:public std::unary_function<tuple_key,std::size_t> {
+struct tuple_hash {//:public std::unary_function<tuple_key,std::size_t>
     //pair_hash is possible,
     //but there is some potential for collision
     template<class T1,class T2, class T3, class T4>
@@ -47,7 +48,7 @@ struct tuple_hash:public std::unary_function<tuple_key,std::size_t> {
     }
 
 };
-struct key_equal:public std::binary_function<tuple_key,tuple_key,bool>{
+struct key_equal{//:public std::binary_function<tuple_key,tuple_key,bool>
 
     bool operator ()(const tuple_key & lhs, const tuple_key &rhs)const{
         return(

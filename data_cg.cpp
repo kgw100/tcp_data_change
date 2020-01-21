@@ -25,13 +25,12 @@ int cb(struct nfq_q_handle *q_handle, struct nfgenmsg *nfmsg,
     int id = 0;
     struct nfqnl_msg_packet_hdr *ph;
     uint32_t payload_len;
-//    u_char * data;
     u_char *cg_data;
     string cg_data_str;
     uint16_t cg_data_len ;
     int i = 0;
     ph = nfq_get_msg_packet_hdr(nfa);
-    if (ph && ph->hw_protocol ==htons(0x0800)) {
+    if (ph ) {
         id = ntohl(ph->packet_id);
     }
     payload_len =static_cast<uint32_t>(nfq_get_payload(nfa, &cg_data));
@@ -52,6 +51,7 @@ int cb(struct nfq_q_handle *q_handle, struct nfgenmsg *nfmsg,
 
       if(iph->saddr < iph->daddr)
       {
+          Tuple_key(iph->saddr,iph->daddr,tcph->th_sport,tcph->th_dport);
           tuple_key = make_tuple(iph->saddr,iph->daddr,tcph->th_sport,tcph->th_dport);
           CgData_HashMap[tuple_key]=vector<uint32_t>{0,0};
           iter = CgData_HashMap.find(tuple_key);
@@ -59,7 +59,8 @@ int cb(struct nfq_q_handle *q_handle, struct nfgenmsg *nfmsg,
       }
       else
       {
-          tuple_key = make_tuple(iph->daddr,iph->saddr,tcph->th_sport,tcph->th_dport);
+          Tuple_key(iph->daddr,iph->saddr,tcph->th_dport,tcph->th_sport);
+          tuple_key = make_tuple(iph->daddr,iph->saddr,tcph->th_dport,tcph->th_sport);
           CgData_HashMap[tuple_key]=vector<uint32_t>{0,0};
           iter = CgData_HashMap.find(tuple_key);
           flow = 1;
@@ -128,7 +129,7 @@ int cb(struct nfq_q_handle *q_handle, struct nfgenmsg *nfmsg,
 
       key.print_Tuple_key();
       printf("------------------------------------------------------------\n");
-      return nfq_set_verdict(q_handle, id, NF_ACCEPT,payload_len, temp_data);
+      return nfq_set_verdict(q_handle, id, NF_ACCEPT,payload_len, cg_data);
         }
     }
      return nfq_set_verdict(q_handle, id, NF_ACCEPT,0, nullptr);
